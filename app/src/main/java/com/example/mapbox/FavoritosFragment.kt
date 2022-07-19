@@ -15,7 +15,6 @@ import com.mapbox.maps.Style
 class FavoritosFragment : Fragment() {
     private var _binding: FragmentFavoritosBinding? = null
     private val binding get() = _binding!!
-    var mapView: MapView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,8 +27,6 @@ class FavoritosFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapView = binding.mapView
-        mapView?.getMapboxMap()?.loadStyleUri(Style.MAPBOX_STREETS)
     }
 
 }
