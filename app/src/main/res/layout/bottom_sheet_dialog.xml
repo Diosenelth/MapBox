@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:horizontalSpacing="1dp"
+    android:verticalSpacing="1dp"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/streets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Streets" />
+
+    <Button
+        android:id="@+id/outdoors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Outdoors" />
+
+    <Button
+        android:id="@+id/satellite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SATELLITE" />
+
+    <Button
+        android:id="@+id/satelliteStreets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SATELLITE_STREETS" />
+
+    <Button
+        android:id="@+id/light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LIGHT" />
+
+    <Button
+        android:id="@+id/dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DARK" />
+</TableLayout>

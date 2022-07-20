@@ -27,23 +27,42 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:clickable="true"
-        android:src="@drawable/ic_baseline_swap_horiz_24"
+        android:src="@drawable/ic_baseline_star_24"
         android:visibility="gone"
-        mapbox:layout_constraintBottom_toTopOf="@+id/fab1"
-        mapbox:layout_constraintEnd_toEndOf="parent" />
+        mapbox:layout_constraintBottom_toTopOf="@+id/sheetDialog"
+        mapbox:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab3"
+        android:id="@+id/sheetDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@android:color/holo_red_dark"
         android:clickable="true"
-        android:src="@drawable/ic_baseline_star_24"
+        android:src="@drawable/ic_baseline_layers_24"
         android:visibility="gone"
-        mapbox:layout_constraintBottom_toTopOf="@+id/fab2"
-        mapbox:layout_constraintEnd_toEndOf="parent" />
+        mapbox:layout_constraintBottom_toTopOf="@+id/fab1"
+        mapbox:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:visibility="visible" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="15dp"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_my_location_24"
+        mapbox:layout_constraintBottom_toBottomOf="parent"
+        mapbox:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <com.mapbox.maps.MapView
         android:id="@+id/mapView"

@@ -15,6 +15,10 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.mapbox.databinding.ActivityMainBinding
 import com.google.gson.Gson
+import com.mapbox.maps.Style
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -28,21 +32,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         checkPermission()
-        obtenerJson()
     }
 
     private fun obtenerJson() {
-        val queue = Volley.newRequestQueue(this)
-        val jsonObjectRequest = StringRequest(Request.Method.GET, url,
-            { res ->
-                val json = JSONObject(res.toString())
-                val geo: GeoJSON = gson.fromJson(json.toString(), GeoJSON::class.java)
+        CoroutineScope(Dispatchers.IO).launch{
+            val queue = Volley.newRequestQueue(baseContext)
+            val jsonObjectRequest = StringRequest(Request.Method.GET, url,
+                { res ->
+                    val json = JSONObject(res.toString())
+                    val geo: GeoJSON = gson.fromJson(json.toString(), GeoJSON::class.java)
 //                Toast.makeText(this, geo.features.size.toString(), Toast.LENGTH_LONG).show()
-            },
-            {
-                Toast.makeText(baseContext, "Error", Toast.LENGTH_LONG).show()
-            })
-        queue.add(jsonObjectRequest)
+                    runOnUiThread {
+                        cargarMapa(geo)
+                    }
+                },
+                {
+                    Toast.makeText(baseContext, "Error al obtener respuesta", Toast.LENGTH_LONG).show()
+                })
+            queue.add(jsonObjectRequest)
+        }
     }
 
 
@@ -65,13 +73,16 @@ class MainActivity : AppCompatActivity() {
                 ), 1
             )
         } else {
-            cargarMapa()
+            obtenerJson()
         }
     }
 
-    fun cargarMapa() {
+    fun cargarMapa(geo: GeoJSON) {
+        val fragment = MapsFragment()
+        fragment.style=Style.MAPBOX_STREETS
+        fragment.json = geo
         val fram = supportFragmentManager.beginTransaction()
-        fram.replace(R.id.container, MapsFragment())
+        fram.replace(R.id.container, fragment)
         fram.commit()
     }
 
@@ -103,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(i)
             finish()
         } else {
-            cargarMapa()
+            obtenerJson()
         }
     }
 }
