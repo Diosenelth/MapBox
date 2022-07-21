@@ -3,4 +3,7 @@
     <string name="mapbox_access_token">pk.eyJ1IjoiZGlvc2VuZWx0aCIsImEiOiJjbDVzZm1nNzYyZ254M2VzeDM2MGMwZHUxIn0.1BUnD7luMWEuDqmpNWyuUA</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="guardar">Guardar</string>
+    <string name="nombre_del_favorito">Nombre del favorito</string>
+    <string name="guardar_favorito">Guardar Favorito</string>
 </resources>

@@ -1,18 +1,21 @@
-package com.example.mapbox
+package com.example.mapbox.views
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.AttributeSet
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.mapbox.GeoJSON
+import com.example.mapbox.R
 import com.example.mapbox.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import com.mapbox.maps.Style
@@ -31,11 +34,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        checkPermission()
+        try {
+            checkPermission()
+        }catch (e: Exception){
+            Toast.makeText(this, "Error ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        return super.onCreateView(name, context, attrs)
     }
 
     private fun obtenerJson() {
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             val queue = Volley.newRequestQueue(baseContext)
             val jsonObjectRequest = StringRequest(Request.Method.GET, url,
                 { res ->
@@ -47,7 +58,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 },
                 {
-                    Toast.makeText(baseContext, "Error al obtener respuesta", Toast.LENGTH_LONG).show()
+                    Toast.makeText(baseContext, "Error al obtener respuesta", Toast.LENGTH_LONG)
+                        .show()
+                    finish()
                 })
             queue.add(jsonObjectRequest)
         }
@@ -78,12 +91,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun cargarMapa(geo: GeoJSON) {
-        val fragment = MapsFragment()
-        fragment.style=Style.MAPBOX_STREETS
-        fragment.json = geo
-        val fram = supportFragmentManager.beginTransaction()
-        fram.replace(R.id.container, fragment)
-        fram.commit()
+        try {
+            val fragment = MapsFragment()
+            fragment.style = Style.MAPBOX_STREETS
+            fragment.json = geo.features
+            val fram = supportFragmentManager.beginTransaction()
+            fram.replace(R.id.container, fragment)
+            fram.commit()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onRequestPermissionsResult(
