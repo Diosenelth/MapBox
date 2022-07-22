@@ -20,7 +20,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.mapbox.Feature
-import com.example.mapbox.GeoJSON
+import com.example.mapbox.`interface`.MostrarMarker
 import com.example.mapbox.R
 import com.example.mapbox.controller.Favorito
 import com.example.mapbox.controller.FavoritosSqlite
@@ -43,7 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MapsFragment : Fragment(), OnMapClickListener {
+class MapsFragment : Fragment(), OnMapClickListener, MostrarMarker {
 
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
@@ -156,11 +156,17 @@ class MapsFragment : Fragment(), OnMapClickListener {
 
         binding.fab1.setOnClickListener { clicked() }
         binding.fab2.setOnClickListener {
-            val fragment = FavoritosFragment()
-            val fram = childFragmentManager.beginTransaction()
-            fram.add(R.id.container, fragment)
-            fram.hide(this)
-            fram.commit()
+            try {
+                val fav = FavoritosFragment()
+                fav.mostrar = this
+                val fram = requireActivity().supportFragmentManager.beginTransaction()
+                fram.add(R.id.container, fav)
+                fram.hide(this)
+                fram.addToBackStack("principal")
+                fram.commit()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.position.setOnClickListener { con = 0 }
@@ -294,6 +300,7 @@ class MapsFragment : Fragment(), OnMapClickListener {
             .setCancelClickListener { obj: SweetAlertDialog -> obj.cancel() }
             .setConfirmClickListener {
                 it.cancel()
+                bottomSheetSave = BottomSheetDialog(requireContext())
                 bottomSheetSave.setContentView(R.layout.bottom_sheet_fav)
 
                 val name = bottomSheetSave.findViewById<EditText>(R.id.et)
@@ -344,5 +351,35 @@ class MapsFragment : Fragment(), OnMapClickListener {
             }
             .show()
         return true
+    }
+
+    override fun mostrarMarker(favorito: Favorito) {
+        Toast.makeText(requireContext(), favorito.nombre, Toast.LENGTH_SHORT).show()
+        val annotationApi = mapView.annotations
+        val pointAnnotationManager =
+            annotationApi.createPointAnnotationManager()
+        val icon =
+            bitmapFromDrawableRes(requireContext(), R.drawable.red_marker)
+        val po = Point.fromLngLat(
+            favorito.lon.toDouble(),
+            favorito.lat.toDouble()
+        )
+
+        val pointAnnotationOptions: PointAnnotationOptions? = icon?.let { bit ->
+            PointAnnotationOptions()
+                .withPoint(po)
+                .withIconImage(bit)
+                .withTextField(favorito.nombre)
+        }
+        if (pointAnnotationOptions != null) {
+            pointAnnotationManager.create(pointAnnotationOptions)
+        }
+        mapView.gestures.focalPoint = mapView.getMapboxMap().pixelForCoordinate(po)
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .center(po)
+                .zoom(15.0)
+                .build()
+        )
     }
 }

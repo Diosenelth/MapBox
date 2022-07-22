@@ -41,9 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        return super.onCreateView(name, context, attrs)
-    }
+
 
     private fun obtenerJson() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -69,10 +67,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) !=
-            PackageManager.PERMISSION_GRANTED ||
+                this,android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -92,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     fun cargarMapa(geo: GeoJSON) {
         try {
+            binding.progressBar.visibility = View.GONE
             val fragment = MapsFragment()
             fragment.style = Style.MAPBOX_STREETS
             fragment.json = geo.features

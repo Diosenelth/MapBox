@@ -1,4 +1,4 @@
-package com.example.mapbox
+package com.example.mapbox.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +7,16 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.mapbox.R
+import com.example.mapbox.`interface`.MostrarMarker
+import com.example.mapbox.`interface`.RegresarFragment
+import com.example.mapbox.`interface`.UpdateView
 import com.example.mapbox.controller.Favorito
 
 class FavoritosAdapter(
     private val list: ArrayList<Favorito>,
-    private val inter: updateView
+    private val inter: UpdateView,
+    private val mostrar: MostrarMarker, val regresar: RegresarFragment
 ) : RecyclerView.Adapter<FavoritosAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -40,6 +45,10 @@ class FavoritosAdapter(
                     it.cancel()
                 }
                 .show()
+        }
+        holder.see.setOnClickListener {
+            mostrar.mostrarMarker(item)
+            regresar.regresar()
         }
     }
 
