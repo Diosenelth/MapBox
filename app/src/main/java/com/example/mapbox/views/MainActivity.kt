@@ -1,12 +1,10 @@
 package com.example.mapbox.views
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.AttributeSet
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +12,7 @@ import androidx.core.content.ContextCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.mapbox.GeoJSON
+import com.example.mapbox.model.GeoJSON
 import com.example.mapbox.R
 import com.example.mapbox.databinding.ActivityMainBinding
 import com.google.gson.Gson
@@ -25,7 +23,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private val gson = Gson()
     private val url =
         "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places_simple.geojson"
@@ -50,13 +48,12 @@ class MainActivity : AppCompatActivity() {
                 { res ->
                     val json = JSONObject(res.toString())
                     val geo: GeoJSON = gson.fromJson(json.toString(), GeoJSON::class.java)
-//                Toast.makeText(this, geo.features.size.toString(), Toast.LENGTH_LONG).show()
                     runOnUiThread {
                         cargarMapa(geo)
                     }
                 },
                 {
-                    Toast.makeText(baseContext, "Error al obtener respuesta", Toast.LENGTH_LONG)
+                    Toast.makeText(baseContext, "Error al obtener respuesta, verifique conexion a internet", Toast.LENGTH_LONG)
                         .show()
                     finish()
                 })
@@ -86,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun cargarMapa(geo: GeoJSON) {
+    private fun cargarMapa(geo: GeoJSON) {
         try {
             binding.progressBar.visibility = View.GONE
             val fragment = MapsFragment()

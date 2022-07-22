@@ -19,7 +19,7 @@ import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
-import com.example.mapbox.Feature
+import com.example.mapbox.model.Feature
 import com.example.mapbox.`interface`.MostrarMarker
 import com.example.mapbox.R
 import com.example.mapbox.controller.Favorito
@@ -80,7 +80,7 @@ class MapsFragment : Fragment(), OnMapClickListener, MostrarMarker {
     lateinit var json: List<Feature>
     private lateinit var loading: SweetAlertDialog
     private lateinit var bd: FavoritosSqlite
-    var con = 0
+    private var con = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,10 +117,11 @@ class MapsFragment : Fragment(), OnMapClickListener, MostrarMarker {
     private fun click() {
         mapView.getMapboxMap().loadStyleUri(style) {
             val ask = SweetAlertDialog(requireContext(), SweetAlertDialog.WARNING_TYPE)
-            ask.titleText = "¿Desea mostrar el nombre de los marcadores?"
+            ask.titleText = "¿Desea mostrar los marcadores con el nombre?"
+            ask.contentText = "Nota: si no desesa mostrarlos solo presione fuera de este dialogo"
 //            ask.setCancelable(false)
             ask.confirmText = "Si"
-            ask.cancelText = "no"
+            ask.cancelText = "No"
             ask.showCancelButton(true)
             ask.setCancelClickListener {
                 it.cancel()

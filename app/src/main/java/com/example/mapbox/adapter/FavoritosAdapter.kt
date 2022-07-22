@@ -16,7 +16,8 @@ import com.example.mapbox.controller.Favorito
 class FavoritosAdapter(
     private val list: ArrayList<Favorito>,
     private val inter: UpdateView,
-    private val mostrar: MostrarMarker, val regresar: RegresarFragment
+    private val mostrar: MostrarMarker,
+    private val regresar: RegresarFragment
 ) : RecyclerView.Adapter<FavoritosAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

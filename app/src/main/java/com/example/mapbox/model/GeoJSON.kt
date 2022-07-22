@@ -1,4 +1,4 @@
-package com.example.mapbox
+package com.example.mapbox.model
 
 data class GeoJSON (
     var type: String,
